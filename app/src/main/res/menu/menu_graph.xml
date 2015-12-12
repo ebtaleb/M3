@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.upmc.m3.GraphActivity">
+
+    <item
+        android:id="@+id/reset_action"
+        android:title="@string/reset"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/export_action"
+        android:title="@string/export"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/new_node_action"
+        android:title="@string/new_node"
+        app:showAsAction="ifRoom"/>
+
+</menu>
