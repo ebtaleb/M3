@@ -10,13 +10,37 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/move_action"
+        android:title="@string/move"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/move_LR"
+                android:title="@string/lr" />
+            <item android:id="@+id/move_RL"
+                android:title="@string/rl" />
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/export_action"
         android:title="@string/export"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/export_svg"
+                android:title="@string/export_svg" />
+            <item android:id="@+id/export_json"
+                android:title="@string/export_json" />
+        </menu>
+    </item>
 
     <item
         android:id="@+id/new_node_action"
         android:title="@string/new_node"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/delete_action"
+        android:title="@string/delete"
         app:showAsAction="ifRoom"/>
 
 </menu>

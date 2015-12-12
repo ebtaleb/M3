@@ -68,7 +68,10 @@ public class GraphActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String node_n = input.getText().toString();
-                webview.loadUrl("javascript:alert('" + node_n + "')");
+                String jsCmd = String.format("javascript:insertNode('%s')", node_n);
+                webview.loadUrl(jsCmd);
+                //webview.loadUrl("javascript:insertNode()");
+                //webview.loadUrl("javascript:alert('" + node_n + "')");
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -84,21 +87,24 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.export_action:
-                new AlertDialog.Builder(this)
-                        .setTitle("Delete entry")
-                        .setMessage("Are you sure you want to delete this entry?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .show();
-                return true;
+//            case R.id.export_action:
+//                new AlertDialog.Builder(this)
+//                        .setTitle("Delete entry")
+//                        .setMessage("Are you sure you want to delete this entry?")
+//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        })
+//                        .show();
+//                return true;
             case R.id.reset_action:
                 webview.loadUrl("javascript:createNew()");
                 return true;
             case R.id.new_node_action:
                 setNewNodeName();
+                return true;
+            case R.id.delete_action:
+                webview.loadUrl("javascript:deleteNode()");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

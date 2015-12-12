@@ -23,18 +23,18 @@ var selectNode = function(target){
     }
 };
 
-var insertNode = function() {
+var insertNode = function(name) {
     var selection = d3.select(".node.selected")[0][0];
-    if(selection){
+    if (selection){
         var data = selection.__data__;
         var dir = getDirection(data);
-        var name = prompt('New name');
-        if(name){
-            if(dir==='root'){
+
+        if (name){
+            if (dir==='root'){
                 dir = data.right.length>data.left.length?'left':'right';
             }
             var cl = data[dir] || data.children || data._children;
-            if(!cl){
+            if (!cl){
                 cl = data.children = [];
             }
             cl.push({name: name, position: dir});
@@ -43,26 +43,26 @@ var insertNode = function() {
     }
 };
 
-var deleteNode =  function() {
+var deleteNode = function() {
     var selection = d3.select(".node.selected")[0][0];
     if (selection){
         var data = selection.__data__;
         var dir = getDirection(data);
         if(dir==='root'){
-            alert('Can\'t delete root');
+            //alert('Can\'t delete root');
             return;
         }
         var cl = data.parent[dir] || data.parent.children;
         if(!cl){
-            alert('Could not locate children');
+            //alert('Could not locate children');
             return;
         }
         var i = 0, l = cl.length;
         for(; i<l; i++){
             if(cl[i].id === data.id){
-                if(confirm('Sure you want to delete '+data.name+'?') === true){
+                //if(confirm('Sure you want to delete '+data.name+'?') === true){
                     cl.splice(i, 1);
-                }
+                //}
                 break;
             }
         }

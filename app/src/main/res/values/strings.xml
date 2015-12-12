@@ -3,7 +3,17 @@
     <string name="action_settings">Settings</string>
     <string name="plus">Add</string>
     <string name="title_activity_graph">Graph</string>
-    <string name="export">Export to..</string>
+    <string name="export">Export</string>
+    <string name="export_svg">To SVG</string>
+    <string name="export_json">To JSON</string>
     <string name="reset">Reset</string>
-    <string name="new_node">Insert node</string>
+    <string name="new_node">Insert</string>
+    <string name="delete">Delete</string>
+    <string name="move">Move</string>
+    <string name="lr">Left to Right</string>
+    <string name="rl">Right to Left</string>
+    <string name="layout">Layout</string>
+    <string name="diagonal">Diagonal</string>
+    <string name="elbow">Elbow</string>
+
 </resources>
