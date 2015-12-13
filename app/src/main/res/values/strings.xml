@@ -1,14 +1,9 @@
 <resources>
 
     <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+        <item>New</item>
+        <item>Export to JSON</item>
+        <item>Export to Mindmap</item>
     </string-array>
     <string name="app_name">M3</string>
     <string name="action_settings">Settings</string>
@@ -26,5 +21,6 @@
     <string name="layout">Layout</string>
     <string name="diagonal">Diagonal</string>
     <string name="elbow">Elbow</string>
-
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

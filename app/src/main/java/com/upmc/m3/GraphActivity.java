@@ -3,13 +3,13 @@ package com.upmc.m3;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +33,7 @@ public class GraphActivity extends AppCompatActivity {
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Bind(R.id.webview)
     WebView webview;
@@ -58,19 +61,37 @@ public class GraphActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+                mDrawerList.setItemChecked(position, false);
+                //setTitle(mPlanetTitles[position]);
+                mDrawerLayout.closeDrawer(mDrawerList);
+            }
+        });
 
-        //Toolbar myChildToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //setSupportActionBar(myChildToolbar);
-
-        // Get a support ActionBar corresponding to this toolbar
-        //ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        //ab.setDisplayHomeAsUpEnabled(true);
+//        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+//                R.drawable.ic_drawer, //nav menu toggle icon
+//                R.string.app_name, // nav drawer open - description for accessibility
+//                R.string.app_name // nav drawer close - description for accessibility
+//        ){
+//            public void onDrawerClosed(View view) {
+//                //getActionBar().setTitle(mTitle);
+//                // calling onPrepareOptionsMenu() to show action bar icons
+//                invalidateOptionsMenu();
+//            }
+//
+//            public void onDrawerOpened(View drawerView) {
+//                //getActionBar().setTitle(mDrawerTitle);
+//                // calling onPrepareOptionsMenu() to hide action bar icons
+//                invalidateOptionsMenu();
+//            }
+//        };
+//
+//        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     public void setNewNodeName() {
@@ -89,8 +110,6 @@ public class GraphActivity extends AppCompatActivity {
                 String node_n = input.getText().toString();
                 String jsCmd = String.format("javascript:insertNode('%s')", node_n);
                 webview.loadUrl(jsCmd);
-                //webview.loadUrl("javascript:insertNode()");
-                //webview.loadUrl("javascript:alert('" + node_n + "')");
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -105,6 +124,11 @@ public class GraphActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
 //            case R.id.export_action:
 //                new AlertDialog.Builder(this)
@@ -154,21 +178,5 @@ public class GraphActivity extends AppCompatActivity {
         webview.getSettings().setUseWideViewPort(true);
         webview.addJavascriptInterface( new WebAppInterface( this ), "Android");
         webview.loadUrl("file:///android_asset/main.html");
-    }
-
-    public class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-
-        private void selectItem(int position) {
-
-            // Highlight the selected item, update the title, and close the drawer
-            mDrawerList.setItemChecked(position, true);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-
-
     }
 }
