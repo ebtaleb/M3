@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +21,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,7 +34,6 @@ public class GraphActivity extends AppCompatActivity {
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @Bind(R.id.webview)
     WebView webview;
@@ -49,6 +49,21 @@ public class GraphActivity extends AppCompatActivity {
         public String loadData() {
             return "";
         }
+
+        @JavascriptInterface
+        public void saveData(String filename, String s) {
+            File file = new File(context.getFilesDir(), filename);
+            System.out.println("derp");
+            FileOutputStream out_stream;
+
+            try {
+                out_stream = openFileOutput(filename, Context.MODE_PRIVATE);
+                out_stream.write(s.getBytes());
+                out_stream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -61,37 +76,27 @@ public class GraphActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        //mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+                switch (position) {
+                    case 0: webview.loadUrl("javascript:createNew()"); break;
+                    case 1: break;
+                    case 2: {
+                        Toast.makeText(getBaseContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        String jsCmd = String.format("javascript:save('%s')", "derp");
+                        webview.loadUrl(jsCmd);
+
+                        break;
+                    }
+                    default: break;
+                }
                 mDrawerList.setItemChecked(position, false);
-                //setTitle(mPlanetTitles[position]);
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
-
-//        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-//                R.drawable.ic_drawer, //nav menu toggle icon
-//                R.string.app_name, // nav drawer open - description for accessibility
-//                R.string.app_name // nav drawer close - description for accessibility
-//        ){
-//            public void onDrawerClosed(View view) {
-//                //getActionBar().setTitle(mTitle);
-//                // calling onPrepareOptionsMenu() to show action bar icons
-//                invalidateOptionsMenu();
-//            }
-//
-//            public void onDrawerOpened(View drawerView) {
-//                //getActionBar().setTitle(mDrawerTitle);
-//                // calling onPrepareOptionsMenu() to hide action bar icons
-//                invalidateOptionsMenu();
-//            }
-//        };
-//
-//        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     public void setNewNodeName() {
@@ -125,29 +130,25 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
         switch (item.getItemId()) {
-//            case R.id.export_action:
-//                new AlertDialog.Builder(this)
-//                        .setTitle("Delete entry")
-//                        .setMessage("Are you sure you want to delete this entry?")
-//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
-//                        .show();
-//                return true;
-            case R.id.reset_action:
-                webview.loadUrl("javascript:createNew()");
-                return true;
             case R.id.new_node_action:
                 setNewNodeName();
                 return true;
             case R.id.delete_action:
-                webview.loadUrl("javascript:deleteNode()");
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete entry")
+                        .setMessage("Are you sure you want to delete this node?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                webview.loadUrl("javascript:deleteNode()");
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

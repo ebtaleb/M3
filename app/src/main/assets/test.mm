@@ -1,12 +1,12 @@
 <map version="1.0.1">
              <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1400771016814" ID="ID_1425716387" MODIFIED="1400771026053" TEXT="Mindmap">
-                                                                               <node CREATED="1400771027265" ID="ID_846682469" MODIFIED="1400771029816" POSITION="right" TEXT="From Freemind">
+<node CREATED="1400771027265" ID="ID_846682469" MODIFIED="1400771029816" POSITION="right" TEXT="From Freemind">
                                                                                                                                                                               <node CREATED="1400771032900" ID="ID_827918588" MODIFIED="1400771037791" TEXT="Stored as .mm"/>
                                                                                                                                                                                                                                                             <node CREATED="1400771038772" ID="ID_1158944789" MODIFIED="1400771044688" TEXT="Really its an xml file"/>
                                                                                                                                                                                                                                                                                                                                            </node>
 <node CREATED="1400771048651" ID="ID_895287109" MODIFIED="1400771056767" POSITION="left" TEXT="Just the basics">
-                                                                                              <node CREATED="1400771105555" ID="ID_420969231" MODIFIED="1400771114341" TEXT="bold">
+<node CREATED="1400771105555" ID="ID_420969231" MODIFIED="1400771114341" TEXT="bold">
                                                                                                                                                                             <font BOLD="true" NAME="SansSerif" SIZE="12"/>
                                                                                                                                                                                                                     </node>
 <node CREATED="1400771107260" ID="ID_1006485332" MODIFIED="1400771115614" TEXT="italic">

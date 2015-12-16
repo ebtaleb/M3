@@ -2,8 +2,11 @@
 
     <string-array name="planets_array">
         <item>New</item>
+        <item>Open</item>
+        <item>Save</item>
+        <item>Import from JSON</item>
+        <item>Import from FreeMind</item>
         <item>Export to JSON</item>
-        <item>Export to Mindmap</item>
     </string-array>
     <string name="app_name">M3</string>
     <string name="action_settings">Settings</string>

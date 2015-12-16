@@ -366,6 +366,17 @@ function toggle(d) {
     }
 }
 
+var censor = function (key, value) {
+    if (key != 'parent' && key != 'depth' && key != 'x' && key != 'y')
+        return value;
+}
+
+function save(fileName) {
+    //alert(JSON.stringify(root, censor));
+    Android.saveData(fileName, JSON.stringify(root, censor));
+    alert("success");
+}
+
 window.onload = function () {
     loadJSON('data.json');
 };
