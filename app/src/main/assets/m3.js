@@ -149,6 +149,28 @@ var vis = d3.select("#body")
 .attr("transform", "translate(" + (w/2+m[3]) + "," + m[0] + ")")
 ;
 
+var loadJSONObj = function(json) {
+        var i=0, l=json.children.length;
+        window.data = root = json;
+        root.x0 = h / 2;
+        root.y0 = 0;
+
+        json.left = [];
+        json.right = [];
+        for(; i<l; i++){
+            if(i%2){
+                json.left.push(json.children[i]);
+                json.children[i].position = 'left';
+            }else{
+                json.right.push(json.children[i]);
+                json.children[i].position = 'right';
+            }
+        }
+
+        update(root, true);
+        selectNode(root);
+};
+
 var loadJSON = function(fileName){
     d3.json(fileName, function(json) {
         var i=0, l=json.children.length;
@@ -378,6 +400,10 @@ function save(fileName) {
 }
 
 window.onload = function () {
-    loadJSON('data.json');
+    //loadJSON('data.json');
+    var de = JSON.parse(Android.loadData("derp"));
+    loadJSONObj(de);
+    //alert(de);
+    alert(JSON.stringify(de));
 };
 

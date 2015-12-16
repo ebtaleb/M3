@@ -3,12 +3,16 @@ package com.upmc.m3;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,13 +27,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.ipaulpro.afilechooser.utils.FileUtils;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GraphActivity extends AppCompatActivity {
+
+    private static final String TAG = "FileChooser";
+    private static final int REQUEST_CODE = 6384; // onActivityResult request
 
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
@@ -46,14 +58,30 @@ public class GraphActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public String loadData() {
-            return "";
+        public String loadData(String filename) {
+            File file = new File(context.getFilesDir(), filename);
+            FileOutputStream out_stream;
+            String text = "";
+
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    text += line;
+                    //text += '\n';
+                }
+                br.close();
+            }
+            catch (IOException e) {
+                //You'll need to add proper error handling here
+            }
+            return text;
         }
 
         @JavascriptInterface
         public void saveData(String filename, String s) {
             File file = new File(context.getFilesDir(), filename);
-            System.out.println("derp");
             FileOutputStream out_stream;
 
             try {
@@ -83,7 +111,14 @@ public class GraphActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0: webview.loadUrl("javascript:createNew()"); break;
-                    case 1: break;
+                    case 1:
+                        // Create the ACTION_GET_CONTENT Intent
+                        Intent getContentIntent = FileUtils.createGetContentIntent();
+
+                        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+                        startActivityForResult(intent, REQUEST_CODE);
+
+                        break;
                     case 2: {
                         Toast.makeText(getBaseContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
                         String jsCmd = String.format("javascript:save('%s')", "derp");
@@ -97,6 +132,31 @@ public class GraphActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE:
+                // If the file selection was successful
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        // Get the URI of the selected file
+                        final Uri uri = data.getData();
+                        Log.i(TAG, "Uri = " + uri.toString());
+                        try {
+                            // Get the file path from the URI
+                            final String path = FileUtils.getPath(this, uri);
+                            Toast.makeText(getBaseContext(),
+                                    "File Selected: " + path, Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Log.e(TAG, "File select error", e);
+                        }
+                    }
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void setNewNodeName() {
