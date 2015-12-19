@@ -93,6 +93,7 @@ var moveNodes = function(from, to){
 };
 
 var setConnector = function(type){
+    //alert(type);
     connector = window[type];
     update(root);
 };
@@ -119,25 +120,27 @@ var handleClick = function(d, index){
 var tree = d3.layout.tree()
     .size([h, w]);
 
-    var calcLeft = function(d){
-        var l = d.y;
-        if(d.position==='left'){
-            l = (d.y)-w/2;
-            l = (w/2) + l;
-        }
-        return {x : d.x, y : l};
-    };
+var calcLeft = function(d){
+    var l = d.y;
+    if(d.position==='left'){
+        l = (d.y)-w/2;
+        l = (w/2) + l;
+    }
+    return {x : d.x, y : l};
+};
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
-    var elbow = function (d, i){
-        var source = calcLeft(d.source);
-        var target = calcLeft(d.target);
-        var hy = (target.y-source.y)/2;
-        return "M" + source.y + "," + source.x
-            + "H" + (source.y+hy)
-            + "V" + target.x + "H" + target.y;
-    };
+
+var elbow = function (d, i){
+    var source = calcLeft(d.source);
+    var target = calcLeft(d.target);
+    var hy = (target.y-source.y)/2;
+    return "M" + source.y + "," + source.x
+        + "H" + (source.y+hy)
+        + "V" + target.x + "H" + target.y;
+};
+
 var connector = elbow;
 
 var vis = d3.select("#body")
@@ -149,7 +152,8 @@ var vis = d3.select("#body")
 .attr("transform", "translate(" + (w/2+m[3]) + "," + m[0] + ")")
 ;
 
-var loadJSONObj = function(json) {
+var loadJSONObj = function(jsonstr) {
+        var json = JSON.parse(jsonstr);
         var i=0, l=json.children.length;
         window.data = root = json;
         root.x0 = h / 2;
@@ -157,6 +161,7 @@ var loadJSONObj = function(json) {
 
         json.left = [];
         json.right = [];
+
         for(; i<l; i++){
             if(i%2){
                 json.left.push(json.children[i]);
@@ -180,6 +185,7 @@ var loadJSON = function(fileName){
 
         json.left = [];
         json.right = [];
+
         for(; i<l; i++){
             if(i%2){
                 json.left.push(json.children[i]);
@@ -389,21 +395,15 @@ function toggle(d) {
 }
 
 var censor = function (key, value) {
-    if (key != 'parent' && key != 'depth' && key != 'x' && key != 'y')
+    if (key != 'parent' && key != 'depth' && key != 'x' && key != 'y' && key != 'x0' && key != 'y0' && key != 'id' && key != 'position' && key != '_children' && key != 'left' && key != 'right')
         return value;
 }
 
 function save(fileName) {
-    //alert(JSON.stringify(root, censor));
-    Android.saveData(fileName, JSON.stringify(root, censor));
-    alert("success");
+    Android.saveData(JSON.stringify(root, censor));
 }
 
 window.onload = function () {
-    //loadJSON('data.json');
-    var de = JSON.parse(Android.loadData("derp"));
-    loadJSONObj(de);
-    //alert(de);
-    alert(JSON.stringify(de));
+    loadJSONObj(Android.loadData());
 };
 

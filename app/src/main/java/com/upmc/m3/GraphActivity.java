@@ -6,12 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +44,7 @@ public class GraphActivity extends AppCompatActivity {
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private String fileName = "derp";
 
     @Bind(R.id.webview)
     WebView webview;
@@ -58,8 +57,8 @@ public class GraphActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public String loadData(String filename) {
-            File file = new File(context.getFilesDir(), filename);
+        public String loadData() {
+            File file = new File(context.getFilesDir(), fileName);
             FileOutputStream out_stream;
             String text = "";
 
@@ -69,23 +68,21 @@ public class GraphActivity extends AppCompatActivity {
 
                 while ((line = br.readLine()) != null) {
                     text += line;
-                    //text += '\n';
                 }
                 br.close();
             }
             catch (IOException e) {
-                //You'll need to add proper error handling here
+
             }
             return text;
         }
 
         @JavascriptInterface
-        public void saveData(String filename, String s) {
-            File file = new File(context.getFilesDir(), filename);
+        public void saveData(String s) {
             FileOutputStream out_stream;
 
             try {
-                out_stream = openFileOutput(filename, Context.MODE_PRIVATE);
+                out_stream = openFileOutput(fileName, Context.MODE_PRIVATE);
                 out_stream.write(s.getBytes());
                 out_stream.close();
             } catch (Exception e) {
@@ -110,9 +107,10 @@ public class GraphActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: webview.loadUrl("javascript:createNew()"); break;
+                    case 0:
+                        webview.loadUrl("javascript:createNew()");
+                        break;
                     case 1:
-                        // Create the ACTION_GET_CONTENT Intent
                         Intent getContentIntent = FileUtils.createGetContentIntent();
 
                         Intent intent = Intent.createChooser(getContentIntent, "Select a file");
@@ -120,13 +118,12 @@ public class GraphActivity extends AppCompatActivity {
 
                         break;
                     case 2: {
-                        Toast.makeText(getBaseContext(), Integer.toString(position), Toast.LENGTH_SHORT).show();
-                        String jsCmd = String.format("javascript:save('%s')", "derp");
-                        webview.loadUrl(jsCmd);
-
+                        webview.loadUrl("javascript:save()");
+                        Toast.makeText(getBaseContext(), "File saved", Toast.LENGTH_SHORT).show();
                         break;
                     }
-                    default: break;
+                    default:
+                        break;
                 }
                 mDrawerList.setItemChecked(position, false);
                 mDrawerLayout.closeDrawer(mDrawerList);
@@ -193,7 +190,7 @@ public class GraphActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.new_node_action:
                 setNewNodeName();
-                return true;
+                break;
             case R.id.delete_action:
                 new AlertDialog.Builder(this)
                         .setTitle("Delete entry")
@@ -209,11 +206,16 @@ public class GraphActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-                return true;
+                break;
+            case R.id.move_LR: webview.loadUrl("javascript:moveNodes('left', 'right')"); break;
+            case R.id.move_RL: webview.loadUrl("javascript:moveNodes('right', 'left')"); break;
+            case R.id.diagonal: webview.loadUrl("javascript:setConnector('diagonal')"); break;
+            case R.id.elbow: webview.loadUrl("javascript:setConnector('elbow')"); break;
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -237,7 +239,7 @@ public class GraphActivity extends AppCompatActivity {
         webview.setWebChromeClient(new WebChromeClient());
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setUseWideViewPort(true);
-        webview.addJavascriptInterface( new WebAppInterface( this ), "Android");
+        webview.addJavascriptInterface(new WebAppInterface(this), "Android");
         webview.loadUrl("file:///android_asset/main.html");
     }
 }

@@ -35,6 +35,16 @@
         </activity>
 
         <activity
+            android:name=".Collapsible"
+            android:label="@string/title_activity_graph"
+            android:theme="@style/Theme.AppCompat"
+            android:parentActivityName="com.upmc.m3.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.upmc.m3.MainActivity" />
+        </activity>
+
+        <activity
             android:name="com.ipaulpro.afilechooser.FileChooserActivity"
             android:icon="@drawable/ic_chooser"
             android:enabled="@bool/use_activity"

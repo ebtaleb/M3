@@ -27,4 +27,16 @@
         android:title="@string/delete"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/map_layout"
+        android:title="@string/layout"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/diagonal"
+                android:title="@string/diagonal" />
+            <item android:id="@+id/elbow"
+                android:title="@string/elbow" />
+        </menu>
+    </item>
+
 </menu>
