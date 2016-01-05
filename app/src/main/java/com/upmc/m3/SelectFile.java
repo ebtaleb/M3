@@ -18,7 +18,7 @@ public class SelectFile extends ListActivity {
         ArrayList<String> filesinfolder = GetFiles(getApplicationContext().getFilesDir().toString());
         ListView listView = getListView();
         listView.setTextFilterEnabled(true);
-        setListAdapter(new ArrayAdapter<String>(SelectFile.this, R.layout.list_fruit, filesinfolder));
+        setListAdapter(new ArrayAdapter<String>(SelectFile.this, R.layout.list_file, filesinfolder));
     }
 
     @Override

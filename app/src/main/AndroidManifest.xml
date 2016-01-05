@@ -10,45 +10,48 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".DashboardActivity"
+            android:launchMode="singleInstance"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <activity
             android:name=".GraphActivity"
             android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.upmc.m3.MainActivity">
+            android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.upmc.m3.MainActivity" />
+                android:value="com.upmc.m3.DashboardActivity" />
         </activity>
 
         <activity
             android:name=".Collapsible"
             android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.upmc.m3.MainActivity">
+            android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.upmc.m3.MainActivity" />
+                android:value="com.upmc.m3.DashboardActivity" />
         </activity>
 
         <activity
             android:name=".SelectFile"
             android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.upmc.m3.MainActivity">
+            android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.upmc.m3.MainActivity" />
+                android:value="com.upmc.m3.DashboardActivity" />
         </activity>
 
     </application>
