@@ -404,6 +404,12 @@ function save(fileName) {
 }
 
 window.onload = function () {
-    loadJSONObj(Android.loadData());
+    var data = Android.loadData();
+    if (data == "") {
+        createNew();
+    } else {
+        loadJSONObj(data);
+    }
+
 };
 

@@ -9,6 +9,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -16,6 +21,7 @@ public class Collapsible extends AppCompatActivity {
 
     @Bind(R.id.webview)
     WebView webview;
+    private String fileName;
 
     public class WebAppInterface {
         private Context context;
@@ -25,14 +31,40 @@ public class Collapsible extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void k() {
+        public String load() {
+            File file = new File(context.getFilesDir(), fileName);
+            String text = "";
 
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    text += line;
+                }
+                br.close();
+            }
+            catch (IOException e) {
+
+            }
+
+            return text;
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            fileName = b.getString("filename");
+        } else {
+            fileName = "";
+        }
+
+        getSupportActionBar().setTitle(fileName);
+
         setContentView(R.layout.activity_my_child);
         ButterKnife.bind(this);
     }

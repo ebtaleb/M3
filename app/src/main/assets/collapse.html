@@ -47,10 +47,11 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("data.json", function(error, flare) {
-  if (error) throw error;
+d3.select(self.frameElement).style("height", "800px");
 
-  root = flare;
+var loadJSONObj = function(jsonstr) {
+  var json = JSON.parse(jsonstr);
+  root = json;
   root.x0 = height / 2;
   root.y0 = 0;
 
@@ -64,9 +65,7 @@ d3.json("data.json", function(error, flare) {
 
   root.children.forEach(collapse);
   update(root);
-});
-
-d3.select(self.frameElement).style("height", "800px");
+};
 
 function update(source) {
 
@@ -166,5 +165,9 @@ function click(d) {
   }
   update(d);
 }
+
+window.onload = function () {
+    loadJSONObj(Android.load());
+};
 
 </script>

@@ -26,7 +26,6 @@
 
         <activity
             android:name=".GraphActivity"
-            android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
             android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data
@@ -36,7 +35,6 @@
 
         <activity
             android:name=".Collapsible"
-            android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
             android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data
@@ -46,7 +44,6 @@
 
         <activity
             android:name=".SelectFile"
-            android:label="@string/title_activity_graph"
             android:theme="@style/Theme.AppCompat"
             android:parentActivityName="com.upmc.m3.DashboardActivity">
             <meta-data

@@ -11,7 +11,6 @@
     <string name="app_name">M3</string>
     <string name="action_settings">Settings</string>
     <string name="plus">Add</string>
-    <string name="title_activity_graph">Graph</string>
     <string name="export">Export</string>
     <string name="export_svg">To SVG</string>
     <string name="export_json">To JSON</string>

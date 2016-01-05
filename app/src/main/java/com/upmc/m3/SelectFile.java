@@ -34,9 +34,12 @@ public class SelectFile extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         String selectedValue = (String) getListAdapter().getItem(position);
 
-        Intent intentMessage=new Intent();
+        Intent intentMessage = new Intent();
         intentMessage.putExtra("MESSAGE", selectedValue);
-        setResult(2, intentMessage);
+
+        int request_code = 2;
+
+        setResult(request_code, intentMessage);
         finish();
     }
 
