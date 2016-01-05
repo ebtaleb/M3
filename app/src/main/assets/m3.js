@@ -71,11 +71,11 @@ var deleteNode = function() {
     }
 };
 
-var renameNode = function(){
+var renameNode = function(name){
     var selection = d3.select(".node.selected")[0][0];
     if(selection){
         var data = selection.__data__;
-        data.name = prompt('New text:', data.name) || data.name;
+        data.name = name;
         update(root);
     }
 };

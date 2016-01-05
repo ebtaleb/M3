@@ -22,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-
 public class DashboardActivity extends AppCompatActivity implements OnItemClickListener {
 
     static final LauncherIcon[] ICONS = {
@@ -61,7 +59,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getBaseContext(), GraphActivity.class);
+                Intent intent = new Intent(getBaseContext(), M3Activity.class);
                 intent.putExtra("filename", input.getText().toString());
                 startActivity(intent);
             }
@@ -128,7 +126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         switch (requestCode) {
             case 1: {
                 // pass filename to activity
-                intent = new Intent(this, GraphActivity.class);
+                intent = new Intent(this, M3Activity.class);
                 intent.putExtra("filename", fileName);
                 startActivity(intent);
                 break;

@@ -65,7 +65,7 @@ public class Collapsible extends AppCompatActivity {
 
         getSupportActionBar().setTitle(fileName);
 
-        setContentView(R.layout.activity_my_child);
+        setContentView(R.layout.activity_m3);
         ButterKnife.bind(this);
     }
 

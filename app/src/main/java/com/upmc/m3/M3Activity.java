@@ -34,7 +34,7 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class GraphActivity extends AppCompatActivity {
+public class M3Activity extends AppCompatActivity {
 
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
@@ -97,7 +97,7 @@ public class GraphActivity extends AppCompatActivity {
             fileName = "derp";
         }
 
-        setContentView(R.layout.activity_my_child);
+        setContentView(R.layout.activity_m3);
         ButterKnife.bind(this);
 
         getSupportActionBar().setTitle(fileName);
@@ -174,8 +174,6 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     public void setNewNodeName() {
-
-        String name = "";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("New node name");
 
@@ -201,12 +199,41 @@ public class GraphActivity extends AppCompatActivity {
         builder.show();
     }
 
+    public void renameNode() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please enter desired node name");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String node_n = input.getText().toString();
+                String jsCmd = String.format("javascript:renameNode('%s')", node_n);
+                webview.loadUrl(jsCmd);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.new_node_action:
                 setNewNodeName();
+                break;
+            case R.id.rename_node:
+                renameNode();
                 break;
             case R.id.delete_action:
                 new AlertDialog.Builder(this)

@@ -14,8 +14,8 @@
     <string name="export">Export</string>
     <string name="export_svg">To SVG</string>
     <string name="export_json">To JSON</string>
-    <string name="reset">Reset</string>
     <string name="new_node">Insert</string>
+    <string name="rename_node">Rename</string>
     <string name="delete">Delete</string>
     <string name="move">Move</string>
     <string name="lr">Left to Right</string>
