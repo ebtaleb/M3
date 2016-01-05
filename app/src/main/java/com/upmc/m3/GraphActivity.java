@@ -109,6 +109,7 @@ public class GraphActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
+                        setNewMapFileName();
                         webview.loadUrl("javascript:createNew()");
                         break;
                     case 1:
@@ -135,10 +136,37 @@ public class GraphActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 2) {
-            String message = data.getStringExtra("MESSAGE");
-            getSupportActionBar().setTitle(message);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            fileName = data.getStringExtra("MESSAGE");
+            getSupportActionBar().setTitle(fileName);
+            Toast.makeText(this, "Map " + fileName + " loaded", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setNewMapFileName() {
+
+        String name = "";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please enter the new map name");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fileName = input.getText().toString();
+                getSupportActionBar().setTitle(fileName);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     public void setNewNodeName() {
