@@ -9,3 +9,8 @@
 .idea
 **/build
 **/.idea
+*.aux
+*.log
+*.out
+*.pdf
+*.toc
