@@ -1,11 +1,15 @@
 package com.upmc.m3;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +29,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ipaulpro.afilechooser.utils.FileUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,9 +39,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GraphActivity extends AppCompatActivity {
-
-    private static final String TAG = "FileChooser";
-    private static final int REQUEST_CODE = 6384; // onActivityResult request
 
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
@@ -59,7 +58,6 @@ public class GraphActivity extends AppCompatActivity {
         @JavascriptInterface
         public String loadData() {
             File file = new File(context.getFilesDir(), fileName);
-            FileOutputStream out_stream;
             String text = "";
 
             try {
@@ -74,6 +72,7 @@ public class GraphActivity extends AppCompatActivity {
             catch (IOException e) {
 
             }
+
             return text;
         }
 
@@ -97,6 +96,8 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_child);
         ButterKnife.bind(this);
 
+        getSupportActionBar().setTitle(fileName);
+
         mPlanetTitles = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -111,11 +112,8 @@ public class GraphActivity extends AppCompatActivity {
                         webview.loadUrl("javascript:createNew()");
                         break;
                     case 1:
-                        Intent getContentIntent = FileUtils.createGetContentIntent();
-
-                        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
-                        startActivityForResult(intent, REQUEST_CODE);
-
+                        Intent intentGetMessage = new Intent(getBaseContext(), SelectFile.class);
+                        startActivityForResult(intentGetMessage, 2);
                         break;
                     case 2: {
                         webview.loadUrl("javascript:save()");
@@ -132,28 +130,15 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                // If the file selection was successful
-                if (resultCode == RESULT_OK) {
-                    if (data != null) {
-                        // Get the URI of the selected file
-                        final Uri uri = data.getData();
-                        Log.i(TAG, "Uri = " + uri.toString());
-                        try {
-                            // Get the file path from the URI
-                            final String path = FileUtils.getPath(this, uri);
-                            Toast.makeText(getBaseContext(),
-                                    "File Selected: " + path, Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Log.e(TAG, "File select error", e);
-                        }
-                    }
-                }
-                break;
-        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2) {
+            String message = data.getStringExtra("MESSAGE");
+            getSupportActionBar().setTitle(message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void setNewNodeName() {
